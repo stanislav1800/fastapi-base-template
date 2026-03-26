@@ -4,7 +4,7 @@ from uuid import UUID
 from src.core.security.permissions import CurrentUser, require_self_or_superuser
 from src.user.dependencies import PasswordHasherDep, UserUOWDep
 from src.user.schemas import UserCreateBody, UserResponse, UserUpdateBody
-from src.user.service import delete_user, get_user_profile, register_user, update_user
+from src.user.service import delete_user, get_user_profile, register_user, update_password, update_user
 
 router = APIRouter()
 
@@ -48,6 +48,19 @@ async def update(user_id: UUID, user_data: UserUpdateBody, uow: UserUOWDep):
     Update user data.
     """
     return await update_user(user_id, user_data, uow)
+
+
+@router.post("/update_password", status_code=status.HTTP_204_NO_CONTENT)
+async def update_current_password(
+    password: str,
+    pwd_hasher: PasswordHasherDep, 
+    uow: UserUOWDep,
+    current_user = Depends(get_current_active_user), 
+):
+    """
+    Update password for authenticated user.
+    """
+    return await update_password(current_user.id, password, pwd_hasher, uow)
 
 
 @router.delete(

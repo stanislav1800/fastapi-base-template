@@ -50,6 +50,18 @@ async def update_user(
     logger.info("User updated", extra={"user_id": str(user.id)})
     return user
 
+async def update_password(
+    pk: UUID,
+    password: str,
+    pwd_hasher: PasswordHasher,
+    uow: UserUnitOfWork
+):
+    async with uow:
+        await uow.users.update_password(pk, pwd_hasher.hash(password))
+        await uow.commit()
+    
+    logger.info("User updated", extra={"user_id": str(pk)})
+
 
 async def delete_user(
     user_pk: UUID,

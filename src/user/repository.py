@@ -62,13 +62,27 @@ class UserRepository:
             raise UserNotFound(detail=f"User with id {user_data.id} not found")
 
         for field, value in user_data.model_dump(exclude_unset=True).items():
-            setattr(obj, field, value)
+            setattr(obj, field, value)  
 
         await self.session.flush()
 
         updated = self._to_domain(obj)
         logger.info("User updated in storage", extra={"user_id": str(updated.id)})
         return updated
+
+    async def update_password(self, pk: UUID, hashed_password: str):
+        stmt = select(UserDB).where(UserDB.id == pk)
+        result = await self.session.execute(stmt)
+        obj: UserDB = result.scalar_one_or_none()
+
+        if not obj:
+            logger.debug("User not found for update", extra={"pk": str(pk)})
+            raise UserNotFound(detail=f"User with id {pk} not found")
+
+        obj.hashed_password = hashed_password
+        await self.session.flush()
+
+        return self._to_domain(obj)
 
     async def delete(self, pk: int):
         obj = await self.session.get(UserDB, pk)
