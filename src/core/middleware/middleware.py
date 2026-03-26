@@ -1,4 +1,5 @@
 import logging
+
 from fastapi import Request
 from starlette.middleware.base import BaseHTTPMiddleware
 
@@ -8,6 +9,7 @@ from src.core.security.jwt import JWTAuth, RefreshedTokens, TokenType
 from src.user.uow import UserUnitOfWork
 from src.user.exceptions import UserNotFound
 from src.database.engine import async_session_maker
+
 
 logger = logging.getLogger(__name__)
 

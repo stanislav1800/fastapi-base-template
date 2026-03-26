@@ -1,0 +1,1 @@
+from .registers import register_middleware

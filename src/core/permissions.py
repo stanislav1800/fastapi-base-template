@@ -1,8 +1,11 @@
 from functools import wraps
-from fastapi import HTTPException, status
 from uuid import UUID
+
+from fastapi import HTTPException, status
+
 from src.core.exceptions import PermissionDenied
 from src.user.models import User
+
 
 def permission_policy(check_func):
     def decorator(func):
