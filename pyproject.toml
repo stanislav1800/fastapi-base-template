@@ -24,6 +24,7 @@ dependencies = [
     "fakeredis>=2.33.0",
     "pydantic[mypy]>=2.12.5",
     "python-json-logger>=4.0.0",
+    "aiohttp>=3.13.3",
 ]
 
 [dependency-groups]
