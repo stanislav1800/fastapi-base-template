@@ -49,17 +49,16 @@ class AuthenticationMiddleware(BaseHTTPMiddleware):
             logger.debug("No access token provided", extra={"path": request.url.path})
 
         else:
-            async with async_session_maker() as session:
-                async with UserUnitOfWork(session) as uow:
-                    try:
-                        user = await uow.users.get_by_pk(access_token_data.user_id)
-                    except UserNotFound:
-                        logger.info(
-                            "User from token not found",
-                            extra={"user_id": str(access_token_data.user_id), "path": request.url.path},
-                        )
-                        user = None
-                    request.state.user = user or None
+            async with UserUnitOfWork(async_session_maker) as uow:
+                try:
+                    user = await uow.users.get_by_pk(access_token_data.user_id)
+                except UserNotFound:
+                    logger.info(
+                        "User from token not found",
+                        extra={"user_id": str(access_token_data.user_id), "path": request.url.path},
+                    )
+                    user = None
+                request.state.user = user or None
 
         response = await call_next(request)
         return response
