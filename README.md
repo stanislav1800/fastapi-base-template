@@ -1,6 +1,6 @@
-# FastAPI Base Template
+# Auth service FastAPI
 
-Небольшой шаблон FastAPI‑проекта с авторизацией, пользователями, JWT и интеграцией с Postgres/Redis. Подходит как стартовая точка для новых сервисов.
+FastAPI‑проекта с авторизацией, пользователями, JWT и интеграцией с Postgres/Redis. Подходит как стартовая точка для новых сервисов.
 
 **Что внутри**
 
@@ -24,7 +24,7 @@ uv sync
 3. Запустите приложение:
 
 ```bash
-uv run uvicorn src.main:app --reload
+uv run uvicorn src.main:app
 ```
 
 Приложение будет доступно на `http://localhost:8000`.
